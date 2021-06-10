@@ -1,4 +1,4 @@
-{ nixpkgs, system }:
+{ flake, nixpkgs, system }:
 let
   myModule = ({ pkgs, ... }: {
     time.timeZone = "America/Chicago";
@@ -24,16 +24,14 @@ let
     inherit system;
     modules = [ "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix" myModule ];
   };
-  
-  showAttrs = name: value: "${name}";
-  blah = builtins.trace (toString (nixpkgs.lib.mapAttrsToList showAttrs nixos.pkgs)) "hello";
 in
 with nixpkgs.legacyPackages.${system};
+with nixpkgs.legacyPackages.${system}.lib;
 stdenv.mkDerivation {
-  name = "nixos-systemd-nspawn";
+  name = "nixos-systemd-nspawn-0.1";
   unpackPhase = ":";
   installPhase = ''
-      mkdir -p $out/etc/systemd/system
-      ln -s ${nixos.config.system.build.toplevel}/etc/systemd/system/{nat,container@}.service $out/etc/systemd/system/
+      mkdir -p $out/lib/systemd/system
+      ln -s ${nixos.config.system.build.toplevel}/etc/systemd/system/{nat,container@}.service $out/lib/systemd/system/
   '';
 }

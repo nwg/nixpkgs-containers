@@ -14,6 +14,7 @@
         packages.nixos-systemd-nspawn = import ./nixos-systemd-nspawn.nix {
           inherit nixpkgs;
           inherit system;
+          flake = self;
         };
         
         defaultPackage = self.packages.${system}.nixos-systemd-nspawn;
