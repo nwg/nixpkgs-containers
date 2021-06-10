@@ -28,13 +28,12 @@ let
   showAttrs = name: value: "${name}";
   blah = builtins.trace (toString (nixpkgs.lib.mapAttrsToList showAttrs nixos.pkgs)) "hello";
 in
-with import nixpkgs { inherit system; };
+with nixpkgs.legacyPackages.${system};
 stdenv.mkDerivation {
   name = "nixos-systemd-nspawn";
   unpackPhase = ":";
   installPhase = ''
       mkdir -p $out/etc/systemd/system
-      echo "${nixos.config.system.build.toplevel}/etc/systemd/system/{nat,container@}.service"
       ln -s ${nixos.config.system.build.toplevel}/etc/systemd/system/{nat,container@}.service $out/etc/systemd/system/
   '';
 }
