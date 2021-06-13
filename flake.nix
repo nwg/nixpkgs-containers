@@ -16,7 +16,7 @@
           inherit system;
           flake = self;
         };
-        
+
         defaultPackage = self.packages.${system}.nixos-systemd-nspawn;
       }
     );
