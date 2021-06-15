@@ -18,12 +18,27 @@ let
       internalInterfaces = ["ve-+"];
       externalInterface = "enp2s0";
     };            
+    mailServerContainer = {
+      enable = true;
+      containerName = "blah";
+    };
+    system.configurationRevision = pkgs.lib.mkIf (flake ? rev) flake.rev;
   });
 
-  nixos = nixpkgs.lib.nixosSystem {
-    inherit system;
-    modules = [ "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix" myModule ];
-  };
+  nixos =
+    # let config = { pkgs, ... }:
+    # {
+    #   mailServerContainer = {
+    #     enable = true;
+    #     containerName = "blah";
+    #   };
+    #   system.configurationRevision = pkgs.lib.mkIf (flake ? rev) flake.rev;
+    # };
+    # in
+    nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [ "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix" myModule (import ./mail-server.nix) ];
+    };
 in
 with nixpkgs.legacyPackages.${system};
 with nixpkgs.legacyPackages.${system}.lib;
