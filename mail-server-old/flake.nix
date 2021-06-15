@@ -34,7 +34,7 @@
 
           # Network configuration.
           networking.useDHCP = false;
-          networking.firewall.allowedTCPPorts = [ 25 587 993 ];
+#          networking.firewall.allowedTCPPorts = [ 25 587 993 ];
           networking.hostName = "smtp";
           networking.domain = "nan.sh";
         })
