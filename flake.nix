@@ -1,23 +1,31 @@
 {
   description = "A very basic flake";
 
-  inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
-    flake-utils.url = "github:numtide/flake-utils";
-  };
-
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
+  inputs.simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-21.05";
+  inputs.simple-nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
+  
+  outputs = { self, nixpkgs, simple-nixos-mailserver }:
+    with nixpkgs.lib;
     let
-      pkgs = nixpkgs.legacyPackages.${system};
-      in {
-        packages.nixos-systemd-nspawn = import ./nixos-systemd-nspawn.nix {
-          inherit nixpkgs;
-          inherit system;
-          flake = self;
-        };
+      system = "x86_64-linux";
+      containerSystem = import ./containerSystem.nix { inherit system; inherit nixpkgs; };
 
-        defaultPackage = self.packages.${system}.nixos-systemd-nspawn;
-      }
-    );
+      commonModule = {
+        system.configurationRevision = mkIf (self ? rev) self.rev;
+      };
+        
+      mailModule = import ./mail.nix {
+        inherit simple-nixos-mailserver;
+      };
+      mailContainer = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ commonModule mailModule ];
+      };
+    in
+      {
+        defaultPackage.${system} = containerSystem.scripts;
+
+        packages.${system}.mailContainer = mailContainer.config.system.build.toplevel;
+      };
 }
