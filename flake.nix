@@ -5,27 +5,30 @@
   inputs.simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-21.05";
   inputs.simple-nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
   
-  outputs = { self, nixpkgs, simple-nixos-mailserver }:
+  outputs = { self, nixpkgs, simple-nixos-mailserver } @ args:
     with nixpkgs.lib;
     let
       system = "x86_64-linux";
-      containerSystem = import ./containerSystem.nix { inherit system; inherit nixpkgs; };
-
+      callFlakeModule = m: import m (args // { inherit system; });
+      
       commonModule = {
         system.configurationRevision = mkIf (self ? rev) self.rev;
       };
-        
-      mailModule = import ./mail.nix {
-        inherit simple-nixos-mailserver;
+
+      baseConfig = {
+        mailContainer.containers.nanmail = {
+          enable = true;
+          config = import ./smtp-nan-sh.nix;
+        };
       };
-      mailContainer = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ commonModule mailModule ];
-      };
+
+      mailContainers = callFlakeModule ./mail.nix;
+
+      containerSystem = import ./containerSystem.nix { inherit system; inherit nixpkgs; nixosModules = [ baseConfig mailContainers ]; };
     in
       {
         defaultPackage.${system} = containerSystem.scripts;
 
-        packages.${system}.mailContainer = mailContainer.config.system.build.toplevel;
+        packages.${system}.nanmail = containerSystem.nixos.config.mailContainer.containers.nanmail;
       };
 }

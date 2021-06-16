@@ -1,34 +1,36 @@
-{ simple-nixos-mailserver }:
+{ nixpkgs, simple-nixos-mailserver, system, ... }:
+{ config, lib, pkgs, ... } @ args:
+
+with lib;
+let cfg = config.mailContainer;
+in
 {
-  require = [ simple-nixos-mailserver.nixosModule ];
-  boot.isContainer = true;
-
-  networking.useDHCP = false;
-  networking.hostName = "smtp";
-  networking.domain = "nan.sh";
-  mailserver = {
-    enable = true;
-    fqdn = "smtp.nan.sh";
-    domains = [ "nan.sh" ];
-
-    loginAccounts = {
-      "nate@nan.sh" = {
-
-        # sudo su -
-        # nix shell 'nixpkgs#apacheHttpd'
-        # htpasswd -nB "" | cut -d: -f2 > '/var/lib/container-support/mail-server/passwords/nate@nan.sh'
-        # ^D^D
-        hashedPasswordFile = "/nix/var/nix/profiles/run/passwords/nate@nan.sh";
-
-        aliases = [
-          "root@nan.sh"
-          "postmaster@nan.sh"
-          "abuse@nan.sh"
-          "forensic@nan.sh"
-          "tls-reports@nan.sh"
-          "admin@nan.sh"
-        ];
-      };
+  options.mailContainer = {
+    containers = mkOption {
+      description = "Mail Container Config";
+      type = types.attrsOf (types.submodule (
+        { config, name, ... }:
+        let cfg = config;
+        in
+          {
+            options = {
+              enable = mkEnableOption "Enable the ${name} mail container";
+              config = mkOption {
+                type = types.attrs;
+                description = "The NixOS Module for this container";
+              };
+            };
+          }));
+      # apply = c: (mapAttrs (n: v: (nixpkgs.lib.nixosSystem { inherit system; modules = []; }).config.system.build.toplevel) c);
+      apply = c:
+        let
+          mkContainer = name: m: (nixpkgs.lib.nixosSystem {
+            inherit system;
+            modules = [ simple-nixos-mailserver.nixosModule m.config ];
+            # modules = [];
+          }).config.system.build.toplevel;
+        in
+          mapAttrs mkContainer c;
     };
   };
 }
