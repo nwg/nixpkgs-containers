@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   require = [ ./base-container.nix ];
 
@@ -7,7 +8,7 @@
   };
   mailserver = {
     enable = true;
-    fqdn = "smtp.nan.sh";
+    fqdn = config.fqdn;
     domains = [ "nan.sh" ];
 
     loginAccounts = {

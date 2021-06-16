@@ -21,7 +21,6 @@ in
               };
             };
           }));
-      # apply = c: (mapAttrs (n: v: (nixpkgs.lib.nixosSystem { inherit system; modules = []; }).config.system.build.toplevel) c);
       apply = c:
         let
           mkContainer = name: m: (nixpkgs.lib.nixosSystem {

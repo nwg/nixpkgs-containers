@@ -24,7 +24,7 @@
 
       mailContainers = callFlakeModule ./mail.nix;
 
-      containerSystem = import ./containerSystem.nix { inherit system; inherit nixpkgs; nixosModules = [ baseConfig mailContainers ]; };
+      containerSystem = import ./container-system.nix { inherit system; inherit nixpkgs; nixosModules = [ baseConfig mailContainers ]; };
     in
       {
         defaultPackage.${system} = containerSystem.scripts;
