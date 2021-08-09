@@ -18,45 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "simple-nixos-mailserver": "simple-nixos-mailserver"
-      }
-    },
-    "simple-nixos-mailserver": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "utils": "utils"
-      },
-      "locked": {
-        "lastModified": 1622967674,
-        "narHash": "sha256-8RLe6Rqy2rKR/PGDMg/EVsWihsO+DQe/RYmlXdRZkLs=",
-        "owner": "simple-nixos-mailserver",
-        "repo": "nixos-mailserver",
-        "rev": "5675b122a947b40e551438df6a623efad19fd2e7",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "simple-nixos-mailserver",
-        "ref": "nixos-21.05",
-        "repo": "nixos-mailserver",
-        "type": "gitlab"
-      }
-    },
-    "utils": {
-      "locked": {
-        "lastModified": 1605370193,
-        "narHash": "sha256-YyMTf3URDL/otKdKgtoMChu4vfVL3vCMkRqpGifhUn0=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "5021eac20303a61fafe17224c087f5519baed54d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

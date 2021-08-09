@@ -1,10 +1,5 @@
-{ nixpkgs, system, nixosModules }:
+{ pkgs, modules }:
 let
-  pkgs = import nixpkgs { inherit system; };
-  
-in
-rec {
-
   nixos = let
     containersBaseConfig = {
       time.timeZone = "UTC";
@@ -26,10 +21,13 @@ rec {
     };
   in
     nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [ "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix" containersBaseConfig ] ++ nixosModules;
+      system = pkgs.system;
+      modules = [ "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix" containersBaseConfig ] ++ modules;
     };
   
+  
+in
+{
   scripts =
     let
       osroot = nixos.config.system.build.toplevel;
@@ -47,6 +45,7 @@ rec {
           ln -s ${osroot}/etc/systemd/system/{nat,container@}.service $out/lib/systemd/system/
           ln -s ${nixosContainerWrapper}/bin/nixos-container-i18n-wrapper $out/bin/nixos-container
         '';
+      } // {
+        containerNixos = nixos;
       };
-    
 }
