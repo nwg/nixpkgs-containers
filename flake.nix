@@ -6,14 +6,11 @@
     with nixpkgs.lib;
     let
       system = "x86_64-linux";
-      
-      containerSystem = import ./container-system.nix { inherit system; inherit nixpkgs; nixosModules = [ baseConfig mailContainers ]; };
+      overlay = (import ./container-system.nix { inherit nixpkgs; }).overlay;
+      pkgs = import nixpkgs { system = "x86_64-linux"; overlays = [ overlay ]; };
     in
       {
-        overlay = final: prev: {
-          containerSystem.mkContainer = modules: import ./container-system.nix {
-              pkgs = final;
-          };
-        };
+        inherit overlay;
+        defaultPackage.x86_64-linux = pkgs.supportContainers;
       };
 }
