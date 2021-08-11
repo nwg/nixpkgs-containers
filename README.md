@@ -39,3 +39,5 @@ curl http://my-system
 * Once the container is created, you can make further manual edits to /etc/containers/my-system.conf
   * If you are using a firewall, open ports using the (comma-separated) `HOST_PORT` setting
   * If you want extra options to systemd-nspawn (see man systemd-nspawn), use `EXTRA_NSPAWN_FLAGS`
+* Start container at boot:
+  `ln -s /etc/systemd/system/container@.service /etc/systemd/system/multi-user.target.wants/container@my-system.service`
