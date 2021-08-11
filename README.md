@@ -20,7 +20,6 @@ mkdir -p /etc/systemd/system/network.target.wants
 ln -s /etc/systemd/system/nat.service /etc/systemd/system/network.target.wants/
 
 # init your container, probably as a normal user
-# for more info see https://www.tweag.io/blog/2020-07-31-nixos-flakes/
 git init my-system
 cd my-system
 nix flake init -t templates#simpleContainer
@@ -34,6 +33,8 @@ nixos-container start my-system
 curl http://my-system
 # output is <html><body><h1>It works!</h1></body></html>
 ```
+
+for more info on flake container init, see https://www.tweag.io/blog/2020-07-31-nixos-flakes/
 
 # Other setup
 
