@@ -1,4 +1,4 @@
-{ nixpkgs, overlayAttrName }:
+{ nixpkgs, version }:
 let
   lib = nixpkgs.lib;
   makeSupportScripts = pkgs:
@@ -36,7 +36,7 @@ let
 
     in
       pkgs.stdenv.mkDerivation {
-        name = "nixos-systemd-nspawn-0.1";
+        name = "nspawn-container-scripts-${version}";
         unpackPhase = ":";
         installPhase = ''
           mkdir -p $out/lib/systemd/system $out/bin
@@ -52,8 +52,6 @@ in
   inherit makeSupportScripts;
 
   overlay = final: prev: {
-    ${overlayAttrName} = (prev . ${overlayAttrName} or {}) // {
-      supportContainers = makeSupportScripts final;
-    };
+    nspawnContainerScripts = makeSupportScripts final;
   };
 }

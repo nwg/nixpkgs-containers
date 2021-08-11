@@ -6,14 +6,17 @@
         "numtide-flake-utils": "numtide-flake-utils"
       },
       "locked": {
-        "lastModified": 1628634539,
-        "narHash": "sha256-IbRh4mF97URsoeCdyPqn5AO+iS3ct1LuZUXZ98ir6rI=",
-        "type": "git",
-        "url": "file:///home/griswold/project/flake-utils"
+        "lastModified": 1628645417,
+        "narHash": "sha256-N98u20D1zkTpoVrMvIkV6NQUnVCZiRhUm5UwPa+YyU8=",
+        "owner": "nwg",
+        "repo": "flake-utils",
+        "rev": "920260024e506cc3cea7cf00aa9d88dac4b172c7",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/griswold/project/flake-utils"
+        "owner": "nwg",
+        "repo": "flake-utils",
+        "type": "github"
       }
     },
     "nixpkgs": {
@@ -32,11 +35,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1628523294,
-        "narHash": "sha256-qMkH/JRRmcqb/eOa/pKksrKGOy2YEPQNH/457QyoyFg=",
+        "lastModified": 1628607662,
+        "narHash": "sha256-TT7jldaYFtHGdVX/yE6FjdpPdNY01xIygB2zGjzFTqk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b09c989b82f7a4f7319802a1dcf8bfe859d65362",
+        "rev": "2d6ab6c6b92f7aaf8bc53baba9754b9bfdce56f2",
         "type": "github"
       },
       "original": {
