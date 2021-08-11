@@ -7,7 +7,8 @@ Adapted to a flake from https://github.com/corngood/portable-nixos-container
 
 Note you must be using the newer nix, which can currently be installed (if you
 are on the old version) using nix-env -iA 'nixpkgs.nixUnstable'. You should
-do this system-wide and restart any builders.
+do this system-wide (into root's nix profile, as this is the system
+environment) and restart any builders using `systemctl restart nix-daemon`
 
 ```
 # (as root)
@@ -18,7 +19,7 @@ systemctl start nat
 mkdir -p /etc/systemd/system/network.target.wants
 ln -s /etc/systemd/system/nat.service /etc/systemd/system/network.target.wants/
 
-# init your container as normal user
+# init your container, probably as a normal user
 git init my-system
 cd my-system
 nix flake init -t templates#simpleContainer
