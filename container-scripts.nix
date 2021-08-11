@@ -1,5 +1,6 @@
-{ nixpkgs }:
+{ nixpkgs, overlayAttrName }:
 let
+  lib = nixpkgs.lib;
   makeSupportScripts = pkgs:
     let
       nixos = let
@@ -51,6 +52,8 @@ in
   inherit makeSupportScripts;
 
   overlay = final: prev: {
-    supportContainers = makeSupportScripts final;
+    ${overlayAttrName} = (prev . ${overlayAttrName} or {}) // {
+      supportContainers = makeSupportScripts final;
+    };
   };
 }

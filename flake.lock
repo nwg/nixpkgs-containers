@@ -6,17 +6,14 @@
         "numtide-flake-utils": "numtide-flake-utils"
       },
       "locked": {
-        "lastModified": 1628629697,
-        "narHash": "sha256-aIfz/WpW3MuaKzT1QS8a2DO9VKLnRGhES3xLLnw9TuI=",
-        "owner": "nwg",
-        "repo": "flake-utils",
-        "rev": "d37c95b0324b2afe5c09428794d61bf86d99c658",
-        "type": "github"
+        "lastModified": 1628634539,
+        "narHash": "sha256-IbRh4mF97URsoeCdyPqn5AO+iS3ct1LuZUXZ98ir6rI=",
+        "type": "git",
+        "url": "file:///home/griswold/project/flake-utils"
       },
       "original": {
-        "owner": "nwg",
-        "repo": "flake-utils",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/griswold/project/flake-utils"
       }
     },
     "nixpkgs": {

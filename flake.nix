@@ -2,16 +2,18 @@
   description = "Container setup script for use of systemd-nspawn containers on non-nixos systems";
 
   inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
-  inputs.flake-utils.url = github:nwg/flake-utils;
+  #inputs.flake-utils.url = github:nwg/flake-utils;
+  inputs.flake-utils.url = git+file:///home/griswold/project/flake-utils;
 
   outputs = { self, nixpkgs, flake-utils } @ args:
    with nixpkgs.lib;
    with flake-utils.lib;
     let
-      #system = "x86_64-linux";
-      overlay = (import ./container-system.nix { inherit nixpkgs; }).overlay;
+      overlayAttrName = "containerSystem";
+      containerScriptsOverlay = (import ./container-scripts.nix { inherit nixpkgs overlayAttrName; }).overlay;
+      basicContainerOverlay = (import ./basic-container.nix { inherit nixpkgs overlayAttrName; }).overlay;
+      overlay = composeOverlays basicContainerOverlay containerScriptsOverlay;
       makePkgs = system: import nixpkgs { inherit system; overlays = [ overlay ]; };
-      pkgs = import nixpkgs { system = "x86_64-linux"; overlays = [ overlay ]; };
     in
       {
         inherit overlay;
@@ -21,7 +23,7 @@
             pkgs = makePkgs system;
           in
             {
-              supportContainers = pkgs.supportContainers;
+              supportContainers = pkgs.${overlayAttrName}.supportContainers;
             });
 
         defaultPackage = forAllSystems (system: self.packages.${system}.supportContainers);
