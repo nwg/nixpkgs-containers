@@ -32,6 +32,7 @@ nixos-container start my-system
 
 curl http://my-system
 # output is <html><body><h1>It works!</h1></body></html>
+# if you are using a firewall, see below
 ```
 
 for more info on flake container init, see https://www.tweag.io/blog/2020-07-31-nixos-flakes/
